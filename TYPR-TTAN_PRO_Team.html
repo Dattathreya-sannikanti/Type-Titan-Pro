@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeTitan Pro | Masterclass Edition</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet" />
+
+    <style>
+        /* ==========================================================
+           📖 TEXTBOOK: CSS VARIABLES & ROOT STYLES
+           ========================================================== */
+        :root {
+            --primary-blue: #3b82f6;
+            --success-green: #22c55e;
+            --error-red: #ef4444;
+            --dark-glass: rgba(10, 15, 25, 0.85);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #000;
+            color: white;
+        }
+
+        /* ==========================================================
+           📖 TEXTBOOK: DYNAMIC BACKGROUND IMAGES
+           ========================================================== */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -10;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #bg-login {
+            background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        #bg-beginner {
+            background-image: url('https://images.unsplash.com/photo-1500964757637-c85e8a162699?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        #bg-intermediate {
+            background-image: url('https://i.pinimg.com/1200x/dc/eb/ef/dcebef49abb89b95b9d3fdb75c168b0a.jpg');
+        }
+
+        #bg-pro {
+            background-image: url('https://i.pinimg.com/1200x/8c/32/0f/8c320fbd9c15f3a2ea34d533f1461ae1.jpg');
+        }
+
+        #bg-syntax {
+            background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        #bg-custom {
+            background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop');
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -5;
+        }
+
+        /* ==========================================================
+           📖 TEXTBOOK: GLASSMORPHISM & UI ELEMENTS
+           ========================================================== */
+        .glass-card {
+            background: var(--dark-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            border-radius: 16px;
+        }
+
+        .custom-input {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 2px solid #334155;
+            color: white;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .custom-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .input-error {
+            border-color: var(--error-red) !important;
+            animation: shake 0.3s;
+        }
+
+        .logo-container {
+            width: 60px;
+            height: 60px;
+            background: black;
+            border: 2px solid white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 32px;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+                text-shadow: 0 0 40px var(--primary-blue);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                text-shadow: 0 0 20px var(--primary-blue);
+            }
+        }
+
+        .animate-pop {
+            animation: popIn 0.5s ease-out forwards;
+        }
+
+        /* ==========================================================
+           📖 TEXTBOOK: HEATMAP STYLING
+           ========================================================== */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .heat-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            background-color: #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .heat-cell.active {
+            background-color: var(--primary-blue);
+            box-shadow: 0 0 8px var(--primary-blue);
+        }
+
+        /* ==========================================================
+           📖 TEXTBOOK: SAGA MAP STYLING
+           ========================================================== */
+        #map-scroll-area {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .thread-line-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .thread-path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 6;
+            stroke-dasharray: 12, 12;
+            stroke-linecap: round;
+        }
+
+        .level-circle {
+            width: 70px;
+            height: 70px;
+            background-color: #0f172a;
+            border: 3px solid #475569;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .level-circle.active {
+            border-color: var(--primary-blue);
+            background-color: var(--primary-blue);
+            box-shadow: 0 0 20px var(--primary-blue);
+            transform: scale(1.15);
+        }
+
+        .level-circle.completed {
+            border-color: var(--success-green);
+            background-color: var(--success-green);
+            color: black;
+        }
+
+        .level-circle.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(100%);
+        }
+
+        .sub-dots {
+            display: flex;
+            gap: 3px;
+            margin-top: -2px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .dot.filled {
+            background: #fbbf24;
+            box-shadow: 0 0 5px #fbbf24;
+        }
+
+        /* ==========================================================
+           📖 TEXTBOOK: SPEEDOMETER & TYPING TEXT
+           ========================================================== */
+        .speedometer-wrapper {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .speedometer-arc {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(from 180deg, var(--error-red) 0deg, var(--primary-blue) 90deg, var(--success-green) 180deg, transparent 180deg);
+            mask: radial-gradient(transparent 60%, black 61%);
+            -webkit-mask: radial-gradient(transparent 60%, black 61%);
+        }
+
+        .speedometer-needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 90px;
+            background: white;
+            transform-origin: bottom center;
+            transform: rotate(-90deg);
+            transition: transform 0.5s ease-out;
+            z-index: 10;
+        }
+
+        .speedometer-center {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        #text-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
+            line-height: 2;
+            color: #94a3b8;
+        }
+
+        .char-correct {
+            color: var(--success-green);
+            text-shadow: 0 0 5px var(--success-green);
+        }
+
+        .char-wrong {
+            color: var(--error-red);
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .char-active {
+            border-bottom: 3px solid var(--primary-blue);
+            color: white;
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .hidden-screen {
+            display: none !important;
+        }
+
+        .flex-screen {
+            display: flex !important;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+    <audio id="bg-music" src="https://www.dropbox.com/scl/fi/cpvwkrl0jlmscw08apqfz/F1_Theme_-Epic_Version-_320k.mp3?rlkey=2gh38vm9bas8nj765xarfpw0g&amp;st=ici9ilzb&amp;raw=1" loop></audio>
+
+    <script>
+        const AudioEngine = {
+            ctx: new(window.AudioContext || window.webkitAudioContext)(),
+
+            playTone: function(frequency, type, duration) {
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+                const oscillator = this.ctx.createOscillator();
+                const gainNode = this.ctx.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = 0.1;
+                gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(this.ctx.destination);
+
+                oscillator.start();
+                oscillator.stop(this.ctx.currentTime + duration);
+            },
+
+            click: function() {
+                this.playTone(600, 'sine', 0.1);
+            },
+
+            error: function() {
+                this.playTone(150, 'sawtooth', 0.2);
+            },
+
+            win: function() {
+                const freqs = [400, 500, 600, 800];
+                freqs.forEach((freq, i) => {
+                    setTimeout(() => {
+                        this.playTone(freq, 'triangle', 0.3);
+                    }, i * 100);
+                });
+            },
+
+            fail: function() {
+                const freqs = [150, 100];
+                freqs.forEach((freq, i) => {
+                    setTimeout(() => {
+                        this.playTone(freq, 'sawtooth', 0.4);
+                    }, i * 300);
+                });
+            },
+
+            countdownBeep: function() {
+                this.playTone(300, 'square', 0.3);
+            },
+
+            countdownGo: function() {
+                this.playTone(900, 'square', 0.6);
+            },
+
+            certPop: function() {
+                const freqs = [523.25, 659.25, 783.99, 1046.50];
+                freqs.forEach((freq, i) => {
+                    setTimeout(() => {
+                        this.playTone(freq, 'sine', 0.5);
+                    }, i * 150);
+                });
+            }
+        };
+    </script>
+
+    <div class="overlay"></div>
+    <div id="bg-login" class="background-image"></div>
+    <div id="bg-beginner" class="background-image hidden-screen"></div>
+    <div id="bg-intermediate" class="background-image hidden-screen"></div>
+    <div id="bg-pro" class="background-image hidden-screen"></div>
+    <div id="bg-syntax" class="background-image hidden-screen"></div>
+    <div id="bg-custom" class="background-image hidden-screen"></div>
+
+    <section id="screen-login" class="flex-grow flex items-center justify-center p-4 z-10">
+        <div class="glass-card p-10 w-full max-w-sm text-center border-t-4 border-white">
+
+            <div class="flex justify-center mb-6">
+                <div class="logo-container">
+                    <span class="logo-text">T</span>
+                </div>
+            </div>
+
+            <h1 class="text-4xl font-bold mb-2 tracking-tighter">TYPETITAN PRO</h1>
+            <p id="login-subtitle" class="text-gray-400 mb-8 text-xs uppercase tracking-widest font-bold">Authorized Access Only</p>
+
+            <form class="text-left space-y-4" onsubmit="handleLoginSubmit(event)">
+                <div>
+                    <label class="text-xs font-bold text-gray-300 ml-1">AGENT ID</label>
+                    <input type="text" id="input-username" class="custom-input" placeholder="Enter Username" required>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-300 ml-1">ACCESS CODE</label>
+                    <div class="relative">
+                        <input type="password" id="input-password" class="custom-input pr-10" placeholder="••••••" required>
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition">
+                            <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="error-message-box" class="text-red-400 text-xs font-bold hidden items-center gap-2 mt-2">
+                    ⚠️ <span id="error-text-content">Invalid Credentials</span>
+                </div>
+
+                <button type="submit" id="btn-action" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition mt-4 shadow-lg">
+                    ENTER SYSTEM
+                </button>
+            </form>
+
+            <p class="mt-4 text-xs text-gray-400">
+                <span id="toggle-text">New Agent?</span>
+                <button type="button" onclick="toggleLoginMode()" class="text-blue-400 font-bold hover:underline ml-1">Initialize Profile</button>
+            </p>
+
+            <div class="flex items-center my-6">
+                <div class="flex-grow h-px bg-gray-600"></div>
+                <span class="px-3 text-gray-400 text-xs">OR</span>
+                <div class="flex-grow h-px bg-gray-600"></div>
+            </div>
+
+            <button onclick="loginAsGuest()" class="w-full bg-white text-gray-900 font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
+                <img src="https://i.pinimg.com/736x/ea/50/80/ea508059e1a6d2f2439c7fac89590526.jpg" width="18"> Continue As Guest
+            </button>
+        </div>
+    </section>
+
+    <section id="screen-dashboard" class="flex-grow flex-col hidden-screen z-10 overflow-y-auto">
+
+        <nav class="p-6 flex justify-between items-center glass-card m-4 rounded-xl sticky top-4 z-50">
+            <div class="flex items-center gap-3">
+                <div class="logo-container" style="width: 36px; height: 36px; border-width: 1px;">
+                    <span class="logo-text" style="font-size: 20px;">T</span>
+                </div>
+                <div class="text-xl font-bold tracking-widest">TYPETITAN PRO</div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMusic()" id="btn-music" class="flex items-center gap-2 border border-white/30 px-3 py-1 rounded text-xs hover:bg-white hover:text-black transition font-bold bg-black/50">
+                    🎵 MUSIC: OFF
+                </button>
+
+                <div class="text-right border-l border-white/20 pl-4">
+                    <div class="text-[10px] text-gray-400 uppercase">OPERATIVE</div>
+                    <div id="display-username" class="text-sm font-bold text-blue-400 font-mono">GUEST</div>
+                </div>
+
+                <button onclick="logoutUser()" class="border border-red-500/50 text-red-300 px-3 py-1 rounded text-xs hover:bg-red-500 hover:text-white transition font-bold ml-2">
+                    LOGOUT
+                </button>
+            </div>
+        </nav>
+
+        <div class="flex-grow flex flex-col p-8 w-full max-w-6xl mx-auto">
+
+            <div class="text-center mb-8">
+                <h2 class="text-5xl font-bold mb-3 tracking-tighter">SELECT PROTOCOL</h2>
+                <p class="text-gray-300 max-w-lg mx-auto">Choose your difficulty, master coding syntax, or create a custom training session.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 w-full mb-16">
+                <div onclick="openMap('beginner')" class="glass-card p-6 cursor-pointer hover:border-green-500 transition hover:-translate-y-2 text-center flex flex-col justify-center">
+                    <div class="text-4xl mb-3">🌱</div>
+                    <h3 class="text-xl font-bold mb-1">BEGINNER</h3>
+                    <p class="text-[10px] text-green-400 font-bold tracking-widest mb-2">4 TASKS / LEVEL</p>
+                    <p class="text-xs text-gray-400">Nature facts.</p>
+                </div>
+
+                <div onclick="openMap('intermediate')" class="glass-card p-6 cursor-pointer hover:border-blue-500 transition hover:-translate-y-2 text-center flex flex-col justify-center">
+                    <div class="text-4xl mb-3">🧬</div>
+                    <h3 class="text-xl font-bold mb-1">INTERMEDIATE</h3>
+                    <p class="text-[10px] text-blue-400 font-bold tracking-widest mb-2">3 TASKS / LEVEL</p>
+                    <p class="text-xs text-gray-400">Science data.</p>
+                </div>
+
+                <div onclick="openMap('pro')" class="glass-card p-6 cursor-pointer hover:border-red-500 transition hover:-translate-y-2 text-center flex flex-col justify-center">
+                    <div class="text-4xl mb-3">🏎️</div>
+                    <h3 class="text-xl font-bold mb-1">PRO TITAN</h3>
+                    <p class="text-[10px] text-red-400 font-bold tracking-widest mb-2">2 TASKS / LEVEL</p>
+                    <p class="text-xs text-gray-400">High Speed F1.</p>
+                </div>
+
+                <div onclick="openMap('syntax')" class="glass-card p-6 cursor-pointer border border-yellow-500/50 hover:border-yellow-400 transition hover:-translate-y-2 text-center bg-yellow-900/10 flex flex-col justify-center shadow-[0_0_20px_rgba(234,179,8,0.15)]">
+                    <div class="text-4xl mb-3">💻</div>
+                    <h3 class="text-xl font-bold mb-1 text-yellow-500">SYNTAX PRO</h3>
+                    <p class="text-[10px] text-yellow-400 font-bold tracking-widest mb-2">5 TASKS / LEVEL</p>
+                    <p class="text-xs text-gray-400">Code structures.</p>
+                </div>
+
+                <div onclick="openCustomRaceModal()" class="glass-card p-6 cursor-pointer hover:border-purple-500 transition hover:-translate-y-2 text-center border-dashed border-2 flex flex-col justify-center">
+                    <div class="text-4xl mb-3">🛠️</div>
+                    <h3 class="text-xl font-bold mb-1">CUSTOM</h3>
+                    <p class="text-[10px] text-purple-400 font-bold tracking-widest mb-2">YOUR RULES</p>
+                    <p class="text-xs text-gray-400">Paste text.</p>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-10 w-full">
+                <h2 class="text-2xl font-bold mb-8 text-center tracking-widest text-gray-400 uppercase">Operative Analytics</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-8 border-t-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-md font-bold text-gray-300 uppercase tracking-widest flex items-center gap-2">🔥 30-Day Activity</h3>
+                            <span class="text-xs bg-blue-900/50 text-blue-400 px-3 py-1 rounded-full font-mono border border-blue-500/30">Consistency Tracker</span>
+                        </div>
+                        <div id="heatmap-container" class="heatmap-grid"></div>
+                        <p class="text-xs text-gray-500 mt-4 text-right">Practice daily to build syntax muscle memory.</p>
+                    </div>
+
+                    <div class="glass-card p-8 border-t-4 border-red-500 flex flex-col justify-center">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-md font-bold text-gray-300 uppercase tracking-widest flex items-center gap-2">🎯 Error Pattern Radar</h3>
+                            <span class="text-xs bg-red-900/50 text-red-400 px-3 py-1 rounded-full font-mono border border-red-500/30">Focus Areas</span>
+                        </div>
+                        <div class="bg-black/60 p-6 rounded-lg border border-white/10 text-center">
+                            <p class="text-xs text-gray-400 mb-4">LIFETIME TOP WEAK KEYS:</p>
+                            <div id="weak-keys-display" class="flex justify-center gap-4">
+                                <span class="text-2xl font-mono bg-green-900/50 text-green-400 px-6 py-3 rounded border border-green-500/30">CLEAN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 border-t border-white/10 pt-10 w-full mb-10">
+                <h2 class="text-2xl font-bold mb-8 text-center tracking-widest text-gray-400 uppercase">Certifications & Awards</h2>
+
+                <div class="glass-card p-8 flex flex-col md:flex-row gap-6 justify-around items-center">
+
+                    <div id="badge-baseline" class="flex items-center gap-6 p-6 rounded-xl border-2 border-gray-700 bg-black/40 w-full opacity-50 grayscale transition-all duration-500">
+                        <div class="text-6xl drop-shadow-lg">🎖️</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-300 tracking-wide uppercase">Baseline Mastery</h4>
+                            <p class="text-sm text-gray-500 mt-1">Complete the PRO TITAN final level.</p>
+                            <p id="status-baseline" class="text-xs font-mono text-gray-600 mt-2">STATUS: LOCKED</p>
+                        </div>
+                    </div>
+
+                    <div id="badge-syntax" class="flex items-center gap-6 p-6 rounded-xl border-2 border-gray-700 bg-black/40 w-full opacity-50 grayscale transition-all duration-500">
+                        <div class="text-6xl drop-shadow-lg">💻</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-300 tracking-wide uppercase">Syntax Master</h4>
+                            <p class="text-sm text-gray-500 mt-1">Complete the SYNTAX PRO final level.</p>
+                            <p id="status-syntax" class="text-xs font-mono text-gray-600 mt-2">STATUS: LOCKED</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="screen-map" class="flex-grow flex-col h-screen hidden-screen overflow-hidden z-10">
+        <div class="p-4 glass-card m-4 flex justify-between items-center z-50">
+            <button onclick="goToScreen('screen-dashboard')" class="text-sm hover:text-black hover:bg-white text-white font-bold border border-white px-4 py-2 rounded transition">
+                ← DASHBOARD
+            </button>
+            <h2 class="text-xl font-bold tracking-widest uppercase" id="map-title">CAMPAIGN MAP</h2>
+            <div class="w-24"></div>
+        </div>
+
+        <div class="flex-grow overflow-y-auto p-10 relative">
+            <div id="map-scroll-area">
+                <svg class="thread-line-svg">
+                    <path id="thread-path" class="thread-path" d="" />
+                </svg>
+                <div id="map-nodes-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="screen-game" class="flex-grow flex-col h-screen p-6 max-w-5xl mx-auto w-full hidden-screen relative z-10">
+
+        <div class="glass-card p-6 rounded-2xl mb-6 flex justify-between items-end border-b-4 border-blue-500" id="hud-top-bar">
+            <div>
+                <p class="text-xs font-bold opacity-70">MISSION STATUS</p>
+                <div class="text-2xl font-bold" id="hud-level-text">LEVEL <span id="hud-level">1</span></div>
+                <div class="text-xs text-blue-300 font-mono mt-1" id="hud-sub">Task 1/4</div>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="speedometer-wrapper">
+                    <div class="speedometer-arc"></div>
+                    <div class="speedometer-needle" id="speed-needle"></div>
+                    <div class="speedometer-center"></div>
+                </div>
+                <div class="text-xl font-bold mt-[-20px]"><span id="live-wpm">0</span> WPM</div>
+            </div>
+
+            <div class="text-right">
+                <div class="text-4xl font-mono font-bold text-gray-300" id="game-timer">60</div>
+                <div class="text-xs font-bold opacity-70">SEC</div>
+            </div>
+        </div>
+
+        <div class="glass-card flex-grow rounded-2xl p-12 relative cursor-text shadow-2xl flex flex-col justify-center overflow-hidden" onclick="focusInput()">
+
+            <input type="text" id="hidden-input" class="opacity-0 absolute top-0 left-0 w-full h-full cursor-default" autocomplete="off">
+
+            <div id="text-display" class="select-none text-gray-300"></div>
+
+            <p class="absolute bottom-6 w-full left-0 text-center text-xs opacity-50 animate-pulse uppercase tracking-widest pointer-events-none">[ START TYPING ]</p>
+
+            <div id="countdown-overlay" class="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center backdrop-blur-md hidden-screen">
+                <div class="text-blue-400 font-bold tracking-[0.5em] mb-4">PREPARE TO RACE</div>
+                <div id="countdown-text" class="text-[12rem] font-bold text-white drop-shadow-[0_0_40px_rgba(59,130,246,1)]">3</div>
+            </div>
+        </div>
+
+        <button onclick="abortMission()" class="absolute top-10 right-10 text-xs text-red-400 border border-red-900/50 px-4 py-2 rounded hover:bg-red-900 font-bold">
+            ABORT
+        </button>
+    </section>
+
+    <div id="modal-level-preview" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center hidden-screen">
+        <div class="glass-card p-8 rounded-2xl w-full max-w-sm text-center border-t-4 border-blue-500">
+
+            <p class="text-xs text-blue-400 font-bold tracking-widest mb-1" id="preview-mode-text">PROTOCOL</p>
+            <h2 class="text-4xl font-bold mb-6 text-white" id="preview-title-text">LEVEL 1</h2>
+
+            <div class="flex justify-between items-center mb-6 bg-black/50 rounded-lg p-2 border border-white/10">
+                <button onclick="changePreviewSub(-1)" class="px-4 py-2 hover:bg-white hover:text-black rounded transition font-bold text-xl">&lt;</button>
+                <div class="flex flex-col">
+                    <span id="preview-task-text" class="text-sm font-bold font-mono text-gray-300">TASK 1/4</span>
+                    <span id="preview-task-status" class="text-[10px] text-green-400 font-bold uppercase tracking-widest mt-1">COMPLETED</span>
+                </div>
+                <button onclick="changePreviewSub(1)" class="px-4 py-2 hover:bg-white hover:text-black rounded transition font-bold text-xl">&gt;</button>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="startFromPreview()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded font-bold text-white shadow-lg transition flex justify-center items-center gap-2">
+                    ▶️ START MISSION
+                </button>
+                <button onclick="viewLeaderboardFromPreview()" class="w-full py-3 bg-yellow-600/20 text-yellow-500 border border-yellow-600 hover:bg-yellow-600 hover:text-white rounded font-bold transition flex justify-center items-center gap-2">
+                    🏆 VIEW LEADERBOARD
+                </button>
+                <button onclick="closePreview()" class="w-full py-3 border border-gray-500 hover:bg-white hover:text-black rounded font-bold text-gray-300 transition mt-2">
+                    CANCEL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-setup-custom" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center hidden-screen">
+        <div class="glass-card p-8 rounded-2xl w-full max-w-lg border-t-4 border-purple-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">🛠️ CREATE CUSTOM RACE</h2>
+
+            <div class="mb-4">
+                <label class="text-xs font-bold text-gray-400">YOUR TEXT PARAGRAPH</label>
+                <textarea id="custom-text-input" class="custom-input h-32 mt-1 resize-none text-sm font-mono" placeholder="Paste the text you want to practice here..."></textarea>
+            </div>
+
+            <div class="mb-8">
+                <label class="text-xs font-bold text-gray-400">TIME LIMIT (SECONDS)</label>
+                <input type="number" id="custom-time-input" class="custom-input mt-1" value="60" min="10" max="300">
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="document.getElementById('modal-setup-custom').classList.add('hidden-screen')" class="w-1/2 py-3 border border-gray-600 hover:bg-gray-800 rounded font-bold transition">
+                    CANCEL
+                </button>
+                <button onclick="startCustomRace()" class="w-1/2 py-3 bg-purple-600 hover:bg-purple-500 rounded font-bold shadow-lg transition">
+                    START RACE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-success" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center hidden-screen">
+        <div class="glass-card p-10 rounded-2xl text-center max-w-sm w-full border-t-4 border-green-500" id="modal-box-style">
+            <h2 class="text-4xl font-bold mb-2 text-white" id="success-title">SUCCESS</h2>
+            <p class="text-xs text-green-400 font-bold tracking-widest mb-6" id="success-subtitle">TASK CLEARED</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-800/80 p-4 rounded border border-white/10">
+                    <div class="text-3xl font-bold text-white" id="result-wpm">0</div>
+                    <div class="text-xs text-gray-400 font-bold">SPEED</div>
+                </div>
+                <div class="bg-slate-800/80 p-4 rounded border border-white/10">
+                    <div class="text-3xl font-bold text-green-400" id="result-acc">0%</div>
+                    <div class="text-xs text-gray-400 font-bold">ACCURACY</div>
+                </div>
+            </div>
+
+            <div class="bg-black/50 p-3 rounded mb-6 text-left border-l-2 border-red-500">
+                <p class="text-xs text-gray-400 font-bold">⚠️ WEAK KEYS DETECTED:</p>
+                <p class="text-white font-mono text-sm mt-1" id="result-weak-keys">None</p>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button id="btn-leaderboard" onclick="showLeaderboard()" class="w-full py-2 bg-yellow-600/20 text-yellow-500 border border-yellow-600 hover:bg-yellow-600 hover:text-white rounded font-bold text-sm transition flex justify-center items-center gap-2">
+                    🏆 VIEW LEADERBOARD
+                </button>
+                <button id="btn-next-level" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded font-bold text-white shadow-lg transition">
+                    CONTINUE
+                </button>
+                <button id="btn-exit-map" class="w-full py-3 border border-gray-500 hover:bg-white hover:text-black rounded font-bold text-gray-300 transition">
+                    EXIT TO MAP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-leaderboard" class="fixed inset-0 bg-black/95 z-[110] flex items-center justify-center hidden-screen">
+        <div class="glass-card p-8 rounded-2xl w-full max-w-md border-t-4 border-yellow-500 relative">
+            <h2 class="text-2xl font-bold mb-1 text-yellow-500 flex items-center gap-2">🏆 TOP OPERATIVES</h2>
+            <p class="text-xs text-gray-400 mb-6 font-mono" id="leaderboard-subtitle">LEVEL DATA</p>
+
+            <div id="leaderboard-list" class="space-y-2 mb-6 min-h-[150px]">
+            </div>
+
+            <button onclick="closeLeaderboard()" class="w-full py-3 bg-gray-700 hover:bg-gray-600 rounded font-bold text-white transition">
+                CLOSE LEADERBOARD
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-certificate" class="fixed inset-0 bg-black/95 z-[120] flex items-center justify-center hidden-screen flex-col">
+
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center opacity-50">
+            <div class="w-[800px] h-[800px] bg-yellow-500 rounded-full blur-[150px] animate-pulse"></div>
+        </div>
+
+        <div class="glass-card p-12 rounded-lg w-full max-w-2xl border-4 border-yellow-500 bg-white/10 text-center relative z-10 animate-pop" id="cert-glass-border">
+            <div class="text-6xl mb-4" id="cert-icon">🎖️</div>
+            <h4 class="font-mono tracking-[0.3em] uppercase text-sm mb-2" id="cert-sub" style="color: #94a3b8;">TypeTitan Authority</h4>
+            <h1 class="text-5xl font-extrabold text-white mb-8 border-b border-gray-500 pb-6" id="cert-title">CERTIFICATE OF MASTERY</h1>
+
+            <p class="text-gray-400 text-lg mb-2">This certifies that</p>
+            <h2 class="text-4xl font-bold text-blue-400 font-mono mb-8 bg-black/40 inline-block px-8 py-2 rounded" id="cert-name">AGENT NAME</h2>
+
+            <p class="text-gray-300 mb-8 max-w-md mx-auto leading-relaxed" id="cert-desc">
+                Has successfully completed the rigorous training regimen and achieved professional-grade mechanical fluency.
+            </p>
+
+            <div class="flex justify-center gap-8 mb-8 border-t border-gray-600 pt-6">
+                <div>
+                    <p class="text-xs text-gray-400 font-bold tracking-widest">FINAL SPEED</p>
+                    <p class="text-3xl font-bold text-white"><span id="cert-wpm">0</span> WPM</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-bold tracking-widest">FINAL ACCURACY</p>
+                    <p class="text-3xl font-bold text-green-400"><span id="cert-acc">0</span>%</p>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-500 font-mono">ID: <span id="cert-id"></span> | Date: <span id="cert-date"></span></p>
+        </div>
+
+        <button onclick="closeCertificate()" class="mt-8 z-10 bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-300 transition shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+            ACCEPT CREDENTIALS & RETURN
+        </button>
+    </div>
+
+    <script>
+        /* ==========================================================
+         * 1. CONFIGURATION & DATABASES
+         * ========================================================== */
+        const DB_USER_PROFILES = 'TypeTitan_V22_Users';
+        const DB_GLOBAL_SCORES = 'TypeTitan_V22_Scores';
+        const TOTAL_LEVELS = 10;
+
+        const GAME_CONFIG = {
+            beginner: {
+                subLevels: 4
+            },
+            intermediate: {
+                subLevels: 3
+            },
+            pro: {
+                subLevels: 2
+            },
+            syntax: {
+                subLevels: 5
+            }
+        };
+
+        /* ==========================================================
+         * MUSIC CONTROLLER
+         * ========================================================== */
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            const backgroundMusic = document.getElementById('bg-music');
+            const musicButton = document.getElementById('btn-music');
+
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicButton.innerText = "🔇 MUSIC: OFF";
+                musicButton.classList.remove('bg-green-600', 'border-green-400');
+                musicButton.classList.add('bg-black/50', 'border-white/30');
+            } else {
+                backgroundMusic.volume = 0.1;
+                backgroundMusic.play().catch(e => console.log("Audio blocked:", e));
+                musicButton.innerText = "🎵 MUSIC: ON";
+                musicButton.classList.remove('bg-black/50', 'border-white/30');
+                musicButton.classList.add('bg-green-600', 'border-green-400');
+            }
+
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        /* ==========================================================
+         * LEADERBOARD DATABASE (WITH PERSONAL BEST LOGIC)
+         * ========================================================== */
+        const LeaderboardSystem = {
+
+            saveScore: function(mode, levelIndex, subIndex, username, finalWpm, finalAcc) {
+                if (mode === 'custom') {
+                    return;
+                }
+
+                let database = JSON.parse(localStorage.getItem(DB_GLOBAL_SCORES));
+
+                if (!database) {
+                    database = {};
+                }
+
+                let levelKey = `${mode}_${levelIndex}_${subIndex}`;
+
+                if (!database[levelKey]) {
+                    database[levelKey] = [];
+                }
+
+                let existingEntryIndex = database[levelKey].findIndex(scoreObj => scoreObj.user === username);
+
+                if (existingEntryIndex !== -1) {
+                    let oldWpm = database[levelKey][existingEntryIndex].wpm;
+                    let oldAcc = database[levelKey][existingEntryIndex].acc;
+                    let isNewScoreBetter = false;
+
+                    if (Number(finalWpm) > oldWpm) {
+                        isNewScoreBetter = true;
+                    } else if (Number(finalWpm) === oldWpm && Number(finalAcc) > oldAcc) {
+                        isNewScoreBetter = true;
+                    }
+
+                    if (isNewScoreBetter) {
+                        database[levelKey][existingEntryIndex].wpm = Number(finalWpm);
+                        database[levelKey][existingEntryIndex].acc = Number(finalAcc);
+                    }
+                } else {
+                    database[levelKey].push({
+                        user: username,
+                        wpm: Number(finalWpm),
+                        acc: Number(finalAcc)
+                    });
+                }
+
+                database[levelKey].sort((a, b) => {
+                    if (b.wpm !== a.wpm) {
+                        return b.wpm - a.wpm;
+                    }
+                    return b.acc - a.acc;
+                });
+
+                database[levelKey] = database[levelKey].slice(0, 5);
+                localStorage.setItem(DB_GLOBAL_SCORES, JSON.stringify(database));
+            },
+
+            getScores: function(mode, levelIndex, subIndex) {
+                let database = JSON.parse(localStorage.getItem(DB_GLOBAL_SCORES));
+
+                if (!database) {
+                    database = {};
+                }
+
+                let levelKey = `${mode}_${levelIndex}_${subIndex}`;
+
+                if (database[levelKey]) {
+                    return database[levelKey];
+                } else {
+                    return [];
+                }
+            }
+        };
+
+        /* ==========================================================
+         * USER AUTHENTICATION & ANALYTICS DATABASE
+         * ========================================================== */
+        const UserDatabase = {
+
+            loginUser: function(username, password) {
+                let database = JSON.parse(localStorage.getItem(DB_USER_PROFILES));
+
+                if (!database) {
+                    database = {};
+                }
+
+                if (!database[username]) {
+                    return {
+                        success: false,
+                        message: "Agent not found."
+                    };
+                }
+
+                if (database[username].password !== password) {
+                    return {
+                        success: false,
+                        message: "Incorrect Access Code."
+                    };
+                }
+
+                // Backwards compatibility for older accounts
+                if (!database[username].activityDates) {
+                    database[username].activityDates = {};
+                }
+
+                if (!database[username].lifetimeErrors) {
+                    database[username].lifetimeErrors = {};
+                }
+
+                if (!database[username].progress.syntax) {
+                    database[username].progress.syntax = {
+                        level: 0,
+                        sub: 0
+                    };
+                }
+
+                return {
+                    success: true,
+                    userData: database[username]
+                };
+            },
+
+            registerUser: function(username, password) {
+                let database = JSON.parse(localStorage.getItem(DB_USER_PROFILES));
+
+                if (!database) {
+                    database = {};
+                }
+
+                if (database[username]) {
+                    return {
+                        success: false,
+                        message: "Agent ID already in use."
+                    };
+                }
+
+                database[username] = {
+                    password: password,
+                    progress: {
+                        beginner: {
+                            level: 0,
+                            sub: 0
+                        },
+                        intermediate: {
+                            level: 0,
+                            sub: 0
+                        },
+                        pro: {
+                            level: 0,
+                            sub: 0
+                        },
+                        syntax: {
+                            level: 0,
+                            sub: 0
+                        }
+                    },
+                    activityDates: {},
+                    lifetimeErrors: {}
+                };
+
+                localStorage.setItem(DB_USER_PROFILES, JSON.stringify(database));
+                return {
+                    success: true,
+                    userData: database[username]
+                };
+            },
+
+            saveFullProfile: function(username, fullUserData) {
+                let database = JSON.parse(localStorage.getItem(DB_USER_PROFILES));
+
+                if (!database) {
+                    database = {};
+                }
+
+                if (database[username]) {
+                    database[username] = fullUserData;
+                    localStorage.setItem(DB_USER_PROFILES, JSON.stringify(database));
+                }
+            }
+        };
+
+        /* ==========================================================
+         * 2. TEXT CONTENT DICTIONARY
+         * 📖 TEXTBOOK: Arrays are fully expanded for readability.
+         * ========================================================== */
+        const TEXT_CONTENT = {
+            beginner: [
+                "Bananas are curved because they grow towards the sun!",
+                "Honey never spoils; you can eat 3000-year-old honey.",
+                "Octopuses have 3 hearts & blue blood inside them.",
+                "Did you know? A day on Venus is longer than its year.",
+                "The Eiffel Tower grows up to 15cm in summer heat.",
+                "Australia is wider than the moon by almost 600km.",
+                "Human teeth cannot heal themselves naturally.",
+                "The heart of a shrimp is located in its head?!",
+                "Your heart stops for a millisecond when you sneeze.",
+                "Pigs cannot look straight up into the sky.",
+                "A group of bright pink flamingos is called a flamboyance.",
+                "Cows have best friends and get stressed when separated.",
+                "Butterflies can actually taste their food using their feet!",
+                "Sea otters can hold their breath much longer than dolphins.",
+                "A 'jiffy' is an actual unit of time: 1/100th of a second.",
+                "Koalas have cube-shaped poop to stop it rolling away.",
+                "Peanuts are technically not nuts; they are legumes.",
+                "Sloths are so slow that green algae can grow on their fur.",
+                "You cannot hum while holding your nose closed. Try it!",
+                "Snails can sleep for up to three years at a single time.",
+                "Elephants are the only mammals in the world that cannot jump.",
+                "An ostrich's eye is physically bigger than its whole brain.",
+                "Frogs can freeze solid without dying and thaw out later.",
+                "Giraffes hum to each other at night to communicate safely.",
+                "A blue whale's tongue weighs as much as an adult elephant.",
+                "The unicorn is actually the national animal of Scotland!",
+                "Cats share 95.6% of their genetic makeup with wild tigers.",
+                "Bamboo grows incredibly fast, up to 35 inches in a single day.",
+                "The loudest animal in the world is the giant sperm whale.",
+                "Hummingbirds flap their tiny wings up to 80 times a second.",
+                "Snow leopards have the thickest fur of any large cat species.",
+                "Starfish have a tiny eye at the end of each of their arms.",
+                "Owls do not have eyeballs; they have long eye tubes instead.",
+                "A chameleon's tongue is twice the length of its entire body.",
+                "Dolphins have specific names for each other in their language.",
+                "Sea turtles hold hands while sleeping so they stay together.",
+                "Apples float in water because they are made of 25% air.",
+                "Penguins can drink salt water because of a special body gland.",
+                "A single fluffy cloud can weigh more than a million pounds!",
+                "Dogs have 32 muscles in each ear to help them hear perfectly."
+            ],
+            intermediate: [
+                "The core temperature of the Earth is estimated to be around 5,200°C.",
+                "A typical lightning strike heats the surrounding air to roughly 30,000 Kelvin!",
+                "The Hubble Space Telescope travels at a speed of 17,000 mph (27,300 km/h).",
+                "Water's chemical formula is H2O, meaning two hydrogen atoms and one oxygen atom.",
+                "The human genome contains approximately 3.2 billion base pairs of DNA.",
+                "Sound waves travel through dense steel at about 5,960 meters per second.",
+                "Saturn's Great Red Spot is a massive storm spanning over 10,000 miles!",
+                "To escape Earth's gravity, a rocket needs to reach 11.2 km/s (Escape Velocity).",
+                "An adult brain weighs about 3 pounds (1.4 kg) and uses 20% of the body's energy.",
+                "The processing speed of a modern computer chip is measured in Gigahertz (GHz).",
+                "Mount Everest's peak sits exactly 8,848.86 meters above global sea level.",
+                "Carbon-14 is a radioactive isotope used for dating ancient organic materials.",
+                "The deepest point in the ocean, Challenger Deep, descends to 10,928 meters.",
+                "Light from the Sun takes approximately 8 minutes and 20 seconds to reach us.",
+                "The freezing point of absolute zero is mathematically defined as -273.15°C.",
+                "In digital binary code, the number 5 is strictly represented by the sequence 0101.",
+                "The human eye can visibly distinguish between 10 million different color shades.",
+                "Earth's atmosphere is composed of 78% nitrogen, 21% oxygen, and 1% trace gases.",
+                "The atomic number of Gold (Au) is 79, making it a heavy, precious metal.",
+                "Voyager 1 became the first human-made object to enter interstellar space in 2012.",
+                "A standard silicon wafer can contain over 50,000,000 microscopic transistors!",
+                "The massive planet Jupiter completes one full rotation on its axis in just 9.9 hours.",
+                "Kinetic energy is calculated using the standard physics formula: KE = 0.5 * m * v^2.",
+                "Human blood types are categorized into four main medical groups: A, B, AB, and O.",
+                "The Mariana Trench water pressure is a crushing 1,086 bars (15,750 psi).",
+                "The radioactive half-life of Uranium-238 is an astonishing 4.468 billion years.",
+                "One astronomical unit (1 AU) is the average distance from the Earth to the Sun.",
+                "Quantum computers process data using qubits, which can represent 0, 1, or both!",
+                "The speed of light through a pure diamond slows down to 124,000 miles per second.",
+                "The famous Fibonacci sequence naturally begins with 0, 1, 1, 2, 3, 5, 8, 13, and 21."
+            ],
+            pro: [
+                "s"
+            ],
+            //[
+            //"The five red lights instantly go out! The grid roars into Turn 1 at 300 km/h.",
+            //"DRS is enabled on lap three. The rear wing opens for a massive +15 km/h boost!",
+            //"Tire temperatures are exceeding 110°C. The soft compound is degrading much faster than expected.",
+            //"He locked the front-right brake at the hairpin. That mistake cost him 0.452 seconds in Sector 2!",
+            //"Box, box, box for hard tires! The pit crew executes a flawless 2.1-second stop.",
+            //"Aerodynamic downforce pushes the car into the track. It corners at a neck-breaking 5G lateral force.",
+            //"The safety car is deployed due to debris. Delta times must be strictly maintained on the steering wheel!",
+            //"The V6 Turbo Hybrid engine recovers kinetic energy. MGU-K deployment is critical for straight-line speed.",
+            //"Pole position was secured by a margin of just 0.012 seconds. Every millimeter of the apex mattered!",
+            //"The checkered flag waves as the crowd erupts! It's a spectacular Grand Slam victory this weekend.",
+            //"Telemetry shows a sudden drop in fuel pressure. The race engineer frantically analyzes the data logs.",
+            //"Slipstreaming down the main straight reduces drag. He dives down the inside for a breathtaking overtake!",
+            //"Track temperature dropped by 5°C before qualifying. The medium tires are struggling to find optimal grip.",
+            //"A 10-second time penalty was issued for causing a collision. He must push hard to build a sufficient gap!",
+            //"The halo device deflected the massive impact perfectly. Carbon fiber shattered, but the driver walked away.",
+            //"Sector 1 is painted purple on the timing screens! He is absolutely flying through the high-speed chicanes.",
+            //"Overtaking at Monaco is notoriously impossible. The barrier is kissed by a mere fraction of an inch!",
+            //"Battery charge is critically low on the final lap. He must defend the racing line without ERS assistance.",
+            //"Rain starts spotting on the visor at Turn 4. The pit wall gambles early by switching to intermediate tires.",
+            //"Downshifting from 8th gear to 2nd takes just milliseconds. The carbon-ceramic brakes glow bright red under load!"
+            //],
+            syntax: [
+                // JS & DOM Manipulation
+                "for (let i = 0; i < array.length; i++) { sum += array[i]; }",
+                "const toggleTheme = () => document.body.classList.toggle('dark-mode');",
+                "document.querySelectorAll('.active').forEach(el => el.classList.remove('hidden'));",
+                "document.getElementById('btn').addEventListener('click', runAction);",
+                "if (!Number.isInteger(input) || input < 0) throw new TypeError(\"Invalid input\");",
+
+                // Python Logic & Data Science
+                "def calculate_average(numbers): return sum(numbers) / len(numbers)",
+                "dict_keys = {k: v for k, v in my_dict.items() if v is not None}",
+                "[word.upper() for word in text.split() if len(word) > 3]",
+                "with open('data.json', 'r') as file: config = json.load(file)",
+                "df['total_cost'] = df['price'] * df['quantity'] * (1 - df['discount'])",
+                "if __name__ == \"__main__\": app.run(host=\"0.0.0.0\", port=8080, debug=True)",
+                "lambda x, y: x * y if x > y else x + y",
+                "def fibonacci(n): return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)",
+
+                // Modern JavaScript & Async
+                "try { await fetchData(); } catch (err) { console.error(err); }",
+                "numbers.sort((a, b) => a - b).filter(n => n % 2 === 0);",
+                "const { title, author: { name, age } } = bookData;",
+                "setTimeout(() => resolve(\"Success!\"), 2500);",
+                "Object.entries(userData).forEach(([key, value]) => console.log(key, value));",
+                "function* generateSequence() { yield 1; yield 2; return 3; }",
+                "if (username === null || password === undefined) return false;",
+                "array.filter(item => item.value > 10).map(item => item.id);",
+
+                // Java & OOP
+                "System.out.println(\"Hello, World!\"); return 0;",
+                "public static void main(String[] args) { init(); }",
+                "public class Vehicle { private String make; private int year; }",
+                "public static final double PI = 3.141592653589793;",
+                "int[] arr = new int[10]; for (int i = 0; i < arr.length; i++) arr[i] = i * 2;",
+                "List<String> names = employees.stream().map(Employee::getName).collect(Collectors.toList());",
+                "public interface Repository<T, ID> { Optional<T> findById(ID id); void save(T entity); }",
+                "String jsonString = new ObjectMapper().writeValueAsString(userObject);",
+                "try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) { stmt.execute(); }",
+
+                // React & Node.js
+                "import React, { useState, useEffect } from 'react';",
+                "const [count, setCount] = useState(0);",
+                "import { BrowserRouter as Router, Route } from 'react-router-dom';",
+                "app.get('/api/data', (req, res) => { res.json({status: 200}); });",
+                "useEffect(() => { const timer = setInterval(tick, 1000); return () => clearInterval(timer); }, []);",
+                "app.post('/login', passport.authenticate('local', { successRedirect: '/' }));",
+                "const store = configureStore({ reducer: { user: userReducer, cart: cartReducer } });",
+                "app.use(cors({ origin: 'https://example.com', credentials: true }));",
+                "export const useAuth = () => { const context = useContext(AuthContext); return context; };",
+                "return <div className=\"flex items-center justify-center p-4\">{children}</div>;",
+                "module.exports = { entry: './src/index.js', output: { filename: 'bundle.js' } };",
+
+                // SQL & Databases
+                "SELECT * FROM users WHERE active = 1 ORDER BY date DESC;",
+                "SELECT department, COUNT(id) FROM employees GROUP BY department HAVING COUNT(id) > 5;",
+                "UPDATE inventory SET stock = stock - 1 WHERE item_id = 492 AND stock > 0;",
+                "SELECT e.name, m.name AS manager FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;",
+                "INSERT INTO logs (action, timestamp) VALUES ('LOGIN', CURRENT_TIMESTAMP);",
+                "SELECT AVG(salary) OVER (PARTITION BY department_id) FROM salaries;",
+
+                // C++ & Systems
+                "std::vector<int> nums = {1, 2, 3}; nums.push_back(4);",
+                "template <typename T> T max(T a, T b) { return (a > b) ? a : b; }",
+                "std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();"
+            ]
+        };
+
+        /* ==========================================================
+         * 3. GLOBAL GAME STATE
+         * ========================================================== */
+        let currentUser = null;
+        let activeProfile = null;
+        let currentMode = 'beginner';
+
+        let game = {
+            level: 0,
+            sub: 0,
+            timerInterval: null,
+            time: 60,
+            initialTime: 60,
+            mistakes: 0,
+            charIndex: 0,
+            isRunning: false,
+            errorKeys: {},
+            isCustom: false,
+            customText: ""
+        };
+
+        let previewLevelIndex = 0;
+        let previewCurrentSub = 0;
+        let previewMaxSub = 0;
+
+        /* ==========================================================
+         * 4. NAVIGATION & STATE SANITIZER
+         * ========================================================== */
+        function goToScreen(screenIdToOpen) {
+            const allScreens = ['screen-login', 'screen-dashboard', 'screen-map', 'screen-game'];
+
+            allScreens.forEach(id => {
+                document.getElementById(id).classList.add('hidden-screen');
+                document.getElementById(id).classList.remove('flex-screen');
+            });
+
+            if (screenIdToOpen === 'screen-dashboard') {
+                game.isCustom = false;
+                game.customText = "";
+                currentMode = 'beginner';
+
+                if (currentUser) {
+                    renderAnalytics();
+                    renderAchievements(); // Update the new achievements panel!
+                }
+            }
+
+            document.getElementById(screenIdToOpen).classList.remove('hidden-screen');
+            document.getElementById(screenIdToOpen).classList.add('flex');
+
+            const allBackgrounds = ['bg-login', 'bg-beginner', 'bg-intermediate', 'bg-pro', 'bg-syntax', 'bg-custom'];
+
+            allBackgrounds.forEach(bgId => {
+                document.getElementById(bgId).classList.add('hidden-screen');
+            });
+
+            if (screenIdToOpen === 'screen-login' || screenIdToOpen === 'screen-dashboard') {
+                document.getElementById('bg-login').classList.remove('hidden-screen');
+            } else if (currentMode) {
+                document.getElementById('bg-' + currentMode).classList.remove('hidden-screen');
+            }
+        }
+
+        /* ==========================================================
+         * 5. LOGIN LOGIC (INFINITE GUEST SUPPORT)
+         * ========================================================== */
+        let isRegisterMode = false;
+
+        function toggleLoginMode() {
+            isRegisterMode = !isRegisterMode;
+
+            if (isRegisterMode) {
+                document.getElementById('login-subtitle').innerText = "Register Profile";
+                document.getElementById('btn-action').innerText = "REGISTER AGENT";
+                document.getElementById('toggle-text').innerText = "Already an Agent?";
+                document.querySelector('#screen-login button.text-blue-400').innerText = "Login Here";
+            } else {
+                document.getElementById('login-subtitle').innerText = "Authorized Access Only";
+                document.getElementById('btn-action').innerText = "ENTER SYSTEM";
+                document.getElementById('toggle-text').innerText = "New Agent?";
+                document.querySelector('#screen-login button.text-blue-400').innerText = "Initialize Profile";
+            }
+
+            document.getElementById('error-message-box').classList.add('hidden');
+        }
+
+        function togglePasswordVisibility() {
+            const p = document.getElementById('input-password');
+            const i = document.getElementById('eye-icon');
+
+            if (p.type === 'password') {
+                p.type = 'text';
+                i.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+            } else {
+                p.type = 'password';
+                i.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />`;
+            }
+        }
+
+        function handleLoginSubmit(event) {
+            // 📖 TEXTBOOK: This stops the form from refreshing the page when you press Enter!
+            event.preventDefault();
+
+            const userBox = document.getElementById('input-username');
+            const passBox = document.getElementById('input-password');
+            const username = userBox.value.trim();
+            const password = passBox.value.trim();
+            const err = document.getElementById('error-message-box');
+
+            err.classList.add('hidden');
+
+            if (!username || !password) {
+                document.getElementById('error-text-content').innerText = "Credentials Required";
+                err.classList.remove('hidden');
+                err.classList.add('flex');
+                return;
+            }
+
+            let res;
+            if (isRegisterMode) {
+                res = UserDatabase.registerUser(username, password);
+            } else {
+                res = UserDatabase.loginUser(username, password);
+            }
+
+            if (res.success) {
+                currentUser = username;
+                activeProfile = res.userData;
+                document.getElementById('display-username').innerText = username.toUpperCase();
+                goToScreen('screen-dashboard');
+            } else {
+                document.getElementById('error-text-content').innerText = res.message;
+                err.classList.remove('hidden');
+                err.classList.add('flex');
+            }
+        }
+
+        function loginAsGuest() {
+            let randomGuestID = "Guest_" + Math.floor(1000 + Math.random() * 9000);
+            let res = UserDatabase.registerUser(randomGuestID, "guest_password");
+
+            currentUser = randomGuestID;
+            activeProfile = res.userData;
+            document.getElementById('display-username').innerText = randomGuestID.toUpperCase();
+            goToScreen('screen-dashboard');
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            activeProfile = null;
+            document.getElementById('input-password').value = "";
+            goToScreen('screen-login');
+        }
+
+        /* ==========================================================
+         * 5.5 PRO ANALYTICS ENGINE & ACHIEVEMENTS
+         * ========================================================== */
+        function recordActivity() {
+            const today = new Date().toISOString().split('T')[0];
+            activeProfile.activityDates[today] = true;
+            UserDatabase.saveFullProfile(currentUser, activeProfile);
+        }
+
+        function renderAnalytics() {
+            // 1. Render Heatmap
+            const heatContainer = document.getElementById('heatmap-container');
+            heatContainer.innerHTML = "";
+
+            for (let i = 29; i >= 0; i--) {
+                let d = new Date();
+                d.setDate(d.getDate() - i);
+                let dateString = d.toISOString().split('T')[0];
+
+                let cell = document.createElement('div');
+                cell.className = "heat-cell";
+
+                if (activeProfile.activityDates[dateString]) {
+                    cell.classList.add("active");
+                }
+
+                heatContainer.appendChild(cell);
+            }
+
+            // 2. Render Weak Keys
+            const weakKeysDisplay = document.getElementById('weak-keys-display');
+            weakKeysDisplay.innerHTML = "";
+
+            let errorsArray = Object.keys(activeProfile.lifetimeErrors).map(key => {
+                return {
+                    character: key,
+                    count: activeProfile.lifetimeErrors[key]
+                };
+            });
+
+            errorsArray.sort((a, b) => b.count - a.count);
+            let top3 = errorsArray.slice(0, 3);
+
+            if (top3.length === 0) {
+                weakKeysDisplay.innerHTML = `<span class="text-2xl font-mono bg-green-900/50 text-green-400 px-6 py-3 rounded border border-green-500/30">CLEAN</span>`;
+            } else {
+                top3.forEach(errObj => {
+                    let charName = errObj.character === " " ? "SPC" : errObj.character;
+                    weakKeysDisplay.innerHTML += `<span class="text-2xl font-mono bg-red-900/50 text-red-400 px-6 py-3 rounded border border-red-500/30">${charName}</span>`;
+                });
+            }
+        }
+
+        function renderAchievements() {
+            const badgeBaseline = document.getElementById('badge-baseline');
+            const badgeSyntax = document.getElementById('badge-syntax');
+
+            const statusBaseline = document.getElementById('status-baseline');
+            const statusSyntax = document.getElementById('status-syntax');
+
+            // Logic for Baseline Mastery (Beat Level 10 of Pro)
+            if (activeProfile.progress['pro'].level >= TOTAL_LEVELS) {
+                badgeBaseline.classList.remove('opacity-50', 'grayscale', 'border-gray-700');
+                badgeBaseline.classList.add('border-yellow-500', 'bg-yellow-900/20');
+                badgeBaseline.querySelector('h4').classList.replace('text-gray-300', 'text-yellow-500');
+                statusBaseline.innerText = "STATUS: UNLOCKED";
+                statusBaseline.classList.replace('text-gray-600', 'text-yellow-400');
+            } else {
+                badgeBaseline.classList.add('opacity-50', 'grayscale', 'border-gray-700');
+                badgeBaseline.classList.remove('border-yellow-500', 'bg-yellow-900/20');
+                badgeBaseline.querySelector('h4').classList.replace('text-yellow-500', 'text-gray-300');
+                statusBaseline.innerText = "STATUS: LOCKED";
+                statusBaseline.classList.replace('text-yellow-400', 'text-gray-600');
+            }
+
+            // Logic for Syntax Master (Beat Level 10 of Syntax)
+            if (activeProfile.progress['syntax'].level >= TOTAL_LEVELS) {
+                badgeSyntax.classList.remove('opacity-50', 'grayscale', 'border-gray-700');
+                badgeSyntax.classList.add('border-blue-500', 'bg-blue-900/20');
+                badgeSyntax.querySelector('h4').classList.replace('text-gray-300', 'text-blue-400');
+                statusSyntax.innerText = "STATUS: UNLOCKED";
+                statusSyntax.classList.replace('text-gray-600', 'text-blue-400');
+            } else {
+                badgeSyntax.classList.add('opacity-50', 'grayscale', 'border-gray-700');
+                badgeSyntax.classList.remove('border-blue-500', 'bg-blue-900/20');
+                badgeSyntax.querySelector('h4').classList.replace('text-blue-400', 'text-gray-300');
+                statusSyntax.innerText = "STATUS: LOCKED";
+                statusSyntax.classList.replace('text-blue-400', 'text-gray-600');
+            }
+        }
+
+        /* ==========================================================
+         * 6. SAGA MAP DRAWING LOGIC
+         * ========================================================== */
+        function openMap(selectedMode) {
+            currentMode = selectedMode;
+            game.isCustom = false;
+
+            document.getElementById('map-title').innerText = selectedMode.toUpperCase() + " SAGA";
+            goToScreen('screen-map');
+
+            setTimeout(() => {
+                renderMap();
+            }, 50);
+        }
+
+        function renderMap() {
+            const mapContainer = document.getElementById('map-nodes-container');
+            const svgLinePath = document.getElementById('thread-path');
+            const scrollAreaElement = document.getElementById('map-scroll-area');
+
+            mapContainer.innerHTML = "";
+
+            const playerStats = activeProfile.progress[currentMode];
+            const maxSubLevels = GAME_CONFIG[currentMode].subLevels;
+            const containerWidth = scrollAreaElement.offsetWidth || 300;
+
+            let drawnPathData = "";
+            let previousX = 0,
+                previousY = 0;
+
+            const startYPosition = 1000;
+            const stepYDistance = 100;
+
+            scrollAreaElement.style.height = (startYPosition + 150) + "px";
+
+            for (let i = 0; i < TOTAL_LEVELS; i++) {
+
+                const isEvenRow = (i % 2 === 0);
+                const actualXPosition = containerWidth * (isEvenRow ? 0.25 : 0.75);
+                const actualYPosition = startYPosition - (i * stepYDistance);
+
+                const circleNode = document.createElement('div');
+                let statusClassString = "locked";
+                let nodeHtmlContent = i + 1;
+
+                if (i < playerStats.level) {
+                    statusClassString = "completed";
+                    nodeHtmlContent = "✓";
+                } else if (i === playerStats.level) {
+                    statusClassString = "active";
+                    nodeHtmlContent = `${i+1} <span class='text-[10px] block'>${playerStats.sub}/${maxSubLevels}</span>`;
+                }
+
+                circleNode.className = `level-circle ${statusClassString}`;
+                circleNode.innerHTML = nodeHtmlContent;
+                circleNode.style.left = (actualXPosition - 35) + "px";
+                circleNode.style.top = (actualYPosition - 35) + "px";
+
+                if (statusClassString !== 'locked') {
+                    let subLevelToStartAt = (i === playerStats.level) ? playerStats.sub : 0;
+                    circleNode.onclick = () => {
+                        openLevelPreview(i, subLevelToStartAt, maxSubLevels);
+                    };
+                }
+
+                if (statusClassString !== 'locked') {
+                    const dotsWrapper = document.createElement('div');
+                    dotsWrapper.className = "sub-dots";
+
+                    let filledDotsCount = (statusClassString === 'completed') ? maxSubLevels : playerStats.sub;
+
+                    for (let s = 0; s < maxSubLevels; s++) {
+                        const tinyDot = document.createElement('div');
+
+                        if (s < filledDotsCount) {
+                            tinyDot.className = "dot filled";
+                        } else {
+                            tinyDot.className = "dot";
+                        }
+
+                        dotsWrapper.appendChild(tinyDot);
+                    }
+                    circleNode.appendChild(dotsWrapper);
+                }
+
+                mapContainer.appendChild(circleNode);
+
+                if (i === 0) {
+                    drawnPathData += `M ${actualXPosition} ${actualYPosition}`;
+                } else {
+                    drawnPathData += ` Q ${previousX} ${(previousY + actualYPosition) / 2}, ${actualXPosition} ${actualYPosition}`;
+                }
+
+                previousX = actualXPosition;
+                previousY = actualYPosition;
+            }
+
+            svgLinePath.setAttribute('d', drawnPathData);
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('screen-map').classList.contains('hidden-screen')) {
+                renderMap();
+            }
+        });
+
+        /* ==========================================================
+         * 6.5. LEVEL PREVIEW MODAL
+         * ========================================================== */
+        function openLevelPreview(lvlIndex, subIndex, maxSubs) {
+            previewLevelIndex = lvlIndex;
+            previewCurrentSub = subIndex;
+            previewMaxSub = maxSubs;
+
+            document.getElementById('preview-mode-text').innerText = currentMode.toUpperCase() + " PROTOCOL";
+            document.getElementById('preview-title-text').innerText = `LEVEL ${lvlIndex + 1}`;
+
+            updatePreviewTaskText();
+
+            document.getElementById('modal-level-preview').classList.remove('hidden-screen');
+            document.getElementById('modal-level-preview').classList.add('flex');
+        }
+
+        function updatePreviewTaskText() {
+            document.getElementById('preview-task-text').innerText = `TASK ${previewCurrentSub + 1} / ${previewMaxSub}`;
+
+            const playerStats = activeProfile.progress[currentMode];
+            const statusElement = document.getElementById('preview-task-status');
+
+            if (previewLevelIndex < playerStats.level || (previewLevelIndex === playerStats.level && previewCurrentSub < playerStats.sub)) {
+                statusElement.innerText = "✅ COMPLETED";
+                statusElement.style.color = "var(--success-green)";
+            } else {
+                statusElement.innerText = "🔓 UNLOCKED (NEXT)";
+                statusElement.style.color = "var(--primary-blue)";
+            }
+        }
+
+        function changePreviewSub(directionValue) {
+            const playerStats = activeProfile.progress[currentMode];
+            let newSubIndex = previewCurrentSub + directionValue;
+
+            if (newSubIndex < 0) {
+                newSubIndex = previewMaxSub - 1;
+            }
+            if (newSubIndex >= previewMaxSub) {
+                newSubIndex = 0;
+            }
+
+            if (previewLevelIndex === playerStats.level && newSubIndex > playerStats.sub) {
+                newSubIndex = playerStats.sub;
+            }
+
+            previewCurrentSub = newSubIndex;
+            updatePreviewTaskText();
+        }
+
+        function closePreview() {
+            document.getElementById('modal-level-preview').classList.add('hidden-screen');
+            document.getElementById('modal-level-preview').classList.remove('flex');
+        }
+
+        function startFromPreview() {
+            closePreview();
+            initGame(previewLevelIndex, previewCurrentSub);
+        }
+
+        function viewLeaderboardFromPreview() {
+            closePreview();
+            game.level = previewLevelIndex;
+            game.sub = previewCurrentSub;
+            showLeaderboard();
+        }
+
+        /* ==========================================================
+         * 7. CUSTOM RACE SYSTEM
+         * ========================================================== */
+        function openCustomRaceModal() {
+            document.getElementById('modal-setup-custom').classList.remove('hidden-screen');
+            document.getElementById('modal-setup-custom').classList.add('flex');
+            document.getElementById('custom-text-input').value = "";
+            document.getElementById('custom-time-input').value = "60";
+        }
+
+        function startCustomRace() {
+            const userPastedText = document.getElementById('custom-text-input').value.trim();
+            const userTimeLimit = parseInt(document.getElementById('custom-time-input').value);
+
+            if (!userPastedText) {
+                alert("Please enter text.");
+                return;
+            }
+
+            document.getElementById('modal-setup-custom').classList.add('hidden-screen');
+
+            currentMode = 'custom';
+            game.isCustom = true;
+            game.customText = userPastedText;
+            game.initialTime = userTimeLimit;
+
+            initGame('C', 0);
+        }
+
+        /* ==========================================================
+         * 8. CORE GAME ENGINE
+         * ========================================================== */
+        function getLevelText(mode, level, sub) {
+            if (game.isCustom) {
+                return game.customText;
+            }
+            const seed = (level * 10) + sub;
+            return TEXT_CONTENT[mode][seed % TEXT_CONTENT[mode].length];
+        }
+
+        function initGame(levelIndex, subIndex) {
+            if (currentMode !== 'custom') {
+                game.isCustom = false;
+            }
+
+            game.level = levelIndex;
+            game.sub = subIndex;
+            game.mistakes = 0;
+            game.charIndex = 0;
+            game.isRunning = false;
+            game.errorKeys = {};
+
+            clearInterval(game.timerInterval);
+
+            if (game.isCustom) {
+                game.time = game.initialTime;
+            } else {
+                game.time = 60;
+                game.initialTime = 60;
+            }
+
+            if (game.isCustom) {
+                document.getElementById('hud-level-text').innerHTML = "CUSTOM <span class='text-purple-400'>RACE</span>";
+                document.getElementById('hud-sub').innerText = "Free Play";
+            } else {
+                document.getElementById('hud-level-text').innerHTML = `LEVEL <span id="hud-level">${levelIndex + 1}</span>`;
+                document.getElementById('hud-sub').innerText = `Task ${subIndex + 1}/${GAME_CONFIG[currentMode].subLevels}`;
+            }
+
+            document.getElementById('live-wpm').innerText = "0";
+            document.getElementById('game-timer').innerText = game.time;
+            document.getElementById('speed-needle').style.transform = "rotate(-90deg)";
+
+            const textToType = getLevelText(currentMode, levelIndex, subIndex);
+            const displayArea = document.getElementById('text-display');
+            displayArea.innerHTML = "";
+
+            textToType.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.innerText = char;
+                displayArea.appendChild(span);
+            });
+
+            displayArea.firstChild.classList.add('char-active');
+
+            const invInput = document.getElementById('hidden-input');
+            invInput.value = "";
+            invInput.disabled = true;
+
+            goToScreen('screen-game');
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const overlay = document.getElementById('countdown-overlay');
+            const txt = document.getElementById('countdown-text');
+
+            overlay.classList.remove('hidden-screen');
+            overlay.classList.add('flex');
+
+            let secs = 3;
+            txt.innerText = secs;
+
+            txt.classList.remove('animate-pop');
+            void txt.offsetWidth;
+            txt.classList.add('animate-pop');
+
+            AudioEngine.countdownBeep();
+
+            const timer = setInterval(() => {
+                secs--;
+
+                txt.classList.remove('animate-pop');
+                void txt.offsetWidth;
+                txt.classList.add('animate-pop');
+
+                if (secs > 0) {
+                    txt.innerText = secs;
+                    AudioEngine.countdownBeep();
+                } else if (secs === 0) {
+                    txt.innerText = "GO!";
+                    AudioEngine.countdownGo();
+                } else {
+                    clearInterval(timer);
+                    overlay.classList.add('hidden-screen');
+                    overlay.classList.remove('flex');
+                    document.getElementById('hidden-input').disabled = false;
+                    document.getElementById('hidden-input').focus();
+                }
+            }, 1000);
+        }
+
+        function focusInput() {
+            document.getElementById('hidden-input').focus();
+        }
+
+        document.getElementById('hidden-input').addEventListener('input', (event) => {
+            const val = event.target.value;
+            const spans = document.getElementById('text-display').children;
+            const i = game.charIndex;
+
+            if (i < spans.length && game.time > 0) {
+                if (!game.isRunning) {
+                    game.isRunning = true;
+                    game.timerInterval = setInterval(mainGameLoop, 1000);
+                }
+
+                const char = val.split('')[i];
+
+                if (char == null) {
+                    if (i > 0) {
+                        game.charIndex--;
+                        spans[game.charIndex].className = "";
+                    }
+                } else {
+                    if (spans[i].innerText === char) {
+                        AudioEngine.click();
+                        spans[i].className = "char-correct";
+                    } else {
+                        AudioEngine.error();
+                        game.mistakes++;
+                        spans[i].className = "char-wrong";
+
+                        let badKey = spans[i].innerText;
+
+                        if (!game.errorKeys[badKey]) {
+                            game.errorKeys[badKey] = 0;
+                        }
+                        game.errorKeys[badKey]++;
+
+                        if (!activeProfile.lifetimeErrors[badKey]) {
+                            activeProfile.lifetimeErrors[badKey] = 0;
+                        }
+                        activeProfile.lifetimeErrors[badKey]++;
+                    }
+                    game.charIndex++;
+                }
+
+                for (let span of spans) {
+                    span.classList.remove('char-active');
+                }
+
+                if (game.charIndex < spans.length) {
+                    spans[game.charIndex].classList.add('char-active');
+                }
+
+                calculateLiveSpeed();
+
+                if (game.charIndex === spans.length) {
+                    finishGame('completed');
+                }
+            }
+        });
+
+        function mainGameLoop() {
+            game.time--;
+            document.getElementById('game-timer').innerText = game.time;
+            calculateLiveSpeed();
+
+            if (game.time <= 0) {
+                finishGame('timeout');
+            }
+        }
+
+        function calculateLiveSpeed() {
+            let safeTimeDivisor = (game.initialTime - game.time) || 1;
+            let displayWPM = Math.round(((game.charIndex / 5) / (safeTimeDivisor / 60)) - game.mistakes);
+
+            if (displayWPM < 0) {
+                displayWPM = 0;
+            }
+
+            document.getElementById('live-wpm').innerText = displayWPM;
+
+            let speedAngle = -90 + (displayWPM * 1.8);
+            if (speedAngle > 90) {
+                speedAngle = 90;
+            }
+            document.getElementById('speed-needle').style.transform = `rotate(${speedAngle}deg)`;
+        }
+
+        function abortMission() {
+            clearInterval(game.timerInterval);
+            document.getElementById('countdown-overlay').classList.add('hidden-screen');
+            goToScreen('screen-dashboard');
+        }
+
+        /* ==========================================================
+         * 9. FINISH, ANALYTICS, & CERTIFICATION ENGINE
+         * ========================================================== */
+        function showLeaderboard() {
+            document.getElementById('modal-success').classList.add('hidden-screen');
+            document.getElementById('modal-success').classList.remove('flex');
+
+            const lbModal = document.getElementById('modal-leaderboard');
+            lbModal.classList.remove('hidden-screen');
+            lbModal.classList.add('flex');
+
+            document.getElementById('leaderboard-subtitle').innerText = `PROTOCOL: ${currentMode.toUpperCase()} | LVL ${game.level+1} | TSK ${game.sub+1}`;
+
+            const listContainer = document.getElementById('leaderboard-list');
+            listContainer.innerHTML = "";
+
+            const topScores = LeaderboardSystem.getScores(currentMode, game.level, game.sub);
+
+            if (topScores.length === 0) {
+                listContainer.innerHTML = "<p class='text-center text-gray-400 mt-10 text-sm'>No records yet.</p>";
+            } else {
+                topScores.forEach((scoreObj, index) => {
+                    let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🎖️';
+                    listContainer.innerHTML += `
+                        <div class="flex justify-between items-center bg-black/40 p-3 rounded border border-white/10">
+                            <div class="font-bold flex items-center gap-2">${medal} ${scoreObj.user.toUpperCase()}</div>
+                            <div class="text-right font-mono">
+                                <span class="text-blue-400 font-bold">${scoreObj.wpm} WPM</span>
+                                <span class="text-xs text-gray-500 block">${scoreObj.acc}% ACC</span>
+                            </div>
+                        </div>`;
+                });
+            }
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('modal-leaderboard').classList.add('hidden-screen');
+            openMap(currentMode);
+        }
+
+        function closeCertificate() {
+            document.getElementById('modal-certificate').classList.add('hidden-screen');
+            document.getElementById('modal-certificate').classList.remove('flex');
+            goToScreen('screen-dashboard');
+        }
+
+        function finishGame(endReason) {
+            clearInterval(game.timerInterval);
+            document.getElementById('hidden-input').disabled = true;
+
+            recordActivity();
+
+            const finalWPM = Number(document.getElementById('live-wpm').innerText);
+            const finalAccuracy = Math.round(((game.charIndex - game.mistakes) / (game.charIndex || 1)) * 100);
+
+            document.getElementById('result-wpm').innerText = finalWPM;
+            document.getElementById('result-acc').innerText = finalAccuracy + "%";
+
+            let weakestKeyString = "None";
+            let maxMisses = 0;
+
+            for (let key in game.errorKeys) {
+                if (game.errorKeys[key] > maxMisses) {
+                    maxMisses = game.errorKeys[key];
+                    weakestKeyString = key === " " ? "Spacebar" : key;
+                }
+            }
+
+            document.getElementById('result-weak-keys').innerText = weakestKeyString;
+
+            const modalWindow = document.getElementById('modal-success');
+            const modalBoxStyle = document.getElementById('modal-box-style');
+            const uiTitle = document.getElementById('success-title');
+            const uiSubtitle = document.getElementById('success-subtitle');
+            const btnPrimary = document.getElementById('btn-next-level');
+            const btnExit = document.getElementById('btn-exit-map');
+            const btnLeaderboard = document.getElementById('btn-leaderboard');
+
+            if (game.isCustom) {
+                btnLeaderboard.classList.add('hidden');
+                btnExit.innerText = "RETURN TO DASHBOARD";
+                btnExit.onclick = () => {
+                    modalWindow.classList.add('hidden-screen');
+                    goToScreen('screen-dashboard');
+                };
+            } else {
+                btnLeaderboard.classList.remove('hidden');
+                btnExit.innerText = "EXIT TO MAP";
+                btnExit.onclick = () => {
+                    modalWindow.classList.add('hidden-screen');
+                    openMap(currentMode);
+                };
+            }
+
+            // SUCCESS LOGIC & CERTIFICATE TRIGGER
+            if (!game.isCustom && endReason === 'completed' && finalAccuracy >= 75) {
+
+                LeaderboardSystem.saveScore(currentMode, game.level, game.sub, currentUser, finalWPM, finalAccuracy);
+
+                const playerStats = activeProfile.progress[currentMode];
+                const maxSubs = GAME_CONFIG[currentMode].subLevels;
+
+                const isPlayingHighestLevel = (game.level === playerStats.level && game.sub === playerStats.sub);
+                const isEndOfTheLevel = (game.sub + 1 >= maxSubs);
+                const isAbsoluteFinalLevel = (isEndOfTheLevel && game.level === TOTAL_LEVELS - 1);
+
+                if (isPlayingHighestLevel) {
+                    if (isEndOfTheLevel) {
+                        playerStats.level++;
+                        playerStats.sub = 0;
+                    } else {
+                        playerStats.sub++;
+                    }
+                    UserDatabase.saveFullProfile(currentUser, activeProfile);
+                }
+
+                // 🎓 THE TWIN CERTIFICATES LOGIC 🎓
+                if (isAbsoluteFinalLevel && isPlayingHighestLevel) {
+                    AudioEngine.certPop();
+                    document.getElementById('cert-name').innerText = currentUser.toUpperCase();
+                    document.getElementById('cert-wpm').innerText = finalWPM;
+                    document.getElementById('cert-acc').innerText = finalAccuracy;
+                    document.getElementById('cert-id').innerText = Math.random().toString(36).substr(2, 9).toUpperCase();
+                    document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
+
+                    const certBorder = document.getElementById('cert-glass-border');
+                    const certIcon = document.getElementById('cert-icon');
+
+                    if (currentMode === 'syntax') {
+                        certBorder.style.borderColor = "var(--primary-blue)";
+                        certIcon.innerText = "💻";
+                        document.getElementById('cert-sub').innerText = "Engineering Dept.";
+                        document.getElementById('cert-title').innerText = "SYNTAX MASTER";
+                        document.getElementById('cert-title').style.color = "var(--primary-blue)";
+                        document.getElementById('cert-desc').innerText = "Has achieved logic-flow typing fluency and mastered mechanical keystroke patterns for professional software development.";
+                    } else {
+                        certBorder.style.borderColor = "#eab308";
+                        certIcon.innerText = "🎖️";
+                        document.getElementById('cert-sub').innerText = "TypeTitan Authority";
+                        document.getElementById('cert-title').innerText = "BASELINE MASTERY";
+                        document.getElementById('cert-title').style.color = "#eab308";
+                        document.getElementById('cert-desc').innerText = "Has successfully completed the rigorous training regimen and achieved professional-grade typing speed and accuracy.";
+                    }
+
+                    document.getElementById('modal-certificate').classList.remove('hidden-screen');
+                    document.getElementById('modal-certificate').classList.add('flex');
+                    return;
+                }
+            }
+
+            if (endReason === 'timeout' || finalAccuracy < 75) {
+                AudioEngine.fail();
+
+                if (endReason === 'timeout') {
+                    uiTitle.innerText = "TIME UP!";
+                    uiSubtitle.innerText = "MISSION FAILED: OUT OF TIME";
+                } else {
+                    uiTitle.innerText = "MISSION FAILED";
+                    uiSubtitle.innerText = "MINIMUM ACCURACY 75% REQUIRED";
+                }
+
+                uiTitle.style.color = "var(--error-red)";
+                uiSubtitle.style.color = "var(--error-red)";
+                modalBoxStyle.style.borderColor = "var(--error-red)";
+
+                btnPrimary.innerText = "RETRY";
+                btnPrimary.onclick = () => {
+                    modalWindow.classList.add('hidden-screen');
+                    initGame(game.isCustom ? 'C' : game.level, game.isCustom ? 0 : game.sub);
+                };
+            } else {
+                AudioEngine.win();
+                uiTitle.style.color = "white";
+                uiSubtitle.style.color = "var(--success-green)";
+                modalBoxStyle.style.borderColor = "var(--success-green)";
+
+                if (game.isCustom) {
+                    uiTitle.innerText = "RACE COMPLETE";
+                    uiSubtitle.innerText = "CUSTOM DATA CLEARED";
+
+                    btnPrimary.innerText = "RETRY PARAGRAPH";
+                    btnPrimary.onclick = () => {
+                        modalWindow.classList.add('hidden-screen');
+                        initGame('C', 0);
+                    };
+                } else {
+                    const isEnd = (game.sub + 1 >= GAME_CONFIG[currentMode].subLevels);
+
+                    if (isEnd) {
+                        uiTitle.innerText = "LEVEL CLEARED";
+                        uiSubtitle.innerText = "UPGRADING CLEARANCE";
+                        btnPrimary.innerText = "RETURN TO MAP";
+                        btnPrimary.onclick = () => {
+                            modalWindow.classList.add('hidden-screen');
+                            openMap(currentMode);
+                        };
+                    } else {
+                        uiTitle.innerText = "TASK COMPLETE";
+                        uiSubtitle.innerText = `READY FOR SUB-LEVEL ${game.sub + 2}`;
+                        btnPrimary.innerText = "NEXT TASK";
+                        btnPrimary.onclick = () => {
+                            modalWindow.classList.add('hidden-screen');
+                            initGame(game.level, game.sub + 1);
+                        };
+                    }
+                }
+            }
+
+            modalWindow.classList.remove('hidden-screen');
+            modalWindow.classList.add('flex');
+        }
+
+        window.onload = function() {
+            goToScreen('screen-login');
+        };
+    </script>
+</body>
+
+</html>
